@@ -13,9 +13,9 @@ class InternalRequest extends Request
 {
     /**
      * @param string|null $baseUrl
-     * @return static
+     * @return InternalRequest
      */
-    public static function createDefault(string $baseUrl = null)
+    public static function createDefault(string $baseUrl = null): InternalRequest
     {
         return new static($baseUrl, null);
     }
@@ -33,9 +33,9 @@ class InternalRequest extends Request
     /**
      * @param string $key
      * @param mixed  $value
-     * @return $this
+     * @return InternalRequest
      */
-    public function setServerParameter($key, $value)
+    public function setServerParameter($key, $value): InternalRequest
     {
         $this->server[$key] = $value;
         return $this;

@@ -3,7 +3,6 @@
 namespace Persata\SymfonyApiExtension;
 
 use Persata\SymfonyApiExtension\ApiClient\InternalRequest;
-use Persata\SymfonyApiExtension\Exception\UnknownHeaderException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Kernel;
@@ -16,12 +15,12 @@ use Symfony\Component\HttpKernel\Kernel;
 class ApiClient
 {
     /**
-     * @var array
+     * List of headers not prefixed with 'HTTP_'
      */
-    private static $headerToServerMap = [
-        'Accept'        => 'HTTP_ACCEPT',
-        'Authorization' => 'HTTP_AUTHORIZATION',
-        'Content-Type'  => 'CONTENT_TYPE',
+    const NON_HTTP_PREFIXED_HEADERS = [
+        'Content-Type',
+        'Content-Length',
+        'Content-MD5',
     ];
 
     /**
@@ -88,41 +87,47 @@ class ApiClient
 
     /**
      * @param string $key
-     * @param mixed  $value
-     * @throws UnknownHeaderException
+     * @param string $value
+     * @return ApiClient
      */
-    public function setRequestHeader($key, $value)
+    public function setRequestHeader($key, $value): ApiClient
     {
-        if (array_key_exists($key, self::$headerToServerMap)) {
-            $this->setServerParameter(self::$headerToServerMap[$key], $value);
-            return;
+        if (in_array($key, self::NON_HTTP_PREFIXED_HEADERS, false)) {
+            $key = str_replace('-', '_', strtoupper($key));
+        } else {
+            $key = sprintf('HTTP_%s', preg_replace('/\s|-/', '_', strtoupper($key)));
         }
 
-        throw new UnknownHeaderException($key);
+        return $this->setServerParameter($key, $value);
     }
 
     /**
-     * @param $key
-     * @param $value
+     * @param string $key
+     * @param string $value
+     * @return ApiClient
      */
-    public function setServerParameter($key, $value)
+    public function setServerParameter(string $key, $value): ApiClient
     {
         $this->internalRequest->setServerParameter($key, $value);
+        return $this;
     }
 
     /**
      * @param string $requestBody
+     * @return ApiClient
      */
-    public function setRequestBody(string $requestBody = null)
+    public function setRequestBody(string $requestBody = null): ApiClient
     {
         $this->internalRequest->setContent($requestBody);
+        return $this;
     }
 
     /**
      * @param string $method
      * @param string $uri
+     * @return ApiClient
      */
-    public function request(string $method, string $uri)
+    public function request(string $method, string $uri): ApiClient
     {
         $this->request = Request::create(
             $uri,
@@ -141,6 +146,8 @@ class ApiClient
         }
 
         $this->response = $this->kernel->handle($this->request);
+
+        return $this;
     }
 
     /**

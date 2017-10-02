@@ -3,7 +3,6 @@
 namespace Persata\SymfonyApiExtension\Tests;
 
 use Persata\SymfonyApiExtension\ApiClient;
-use Persata\SymfonyApiExtension\Exception\UnknownHeaderException;
 use Symfony\Component\HttpKernel\Kernel;
 
 /**
@@ -55,9 +54,13 @@ class HeadersTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Bearer MyToken', $serverParameters['HTTP_AUTHORIZATION']);
     }
 
-    public function testUnknownHeader()
+    public function testContentTransferEncoding()
     {
-        $this->expectException(UnknownHeaderException::class);
-        $this->apiClient->setRequestHeader('UnmatchedHeaderName', 'SomeValue');
+        $this->apiClient->setRequestHeader('Content-Transfer-Encoding', 'BINARY');
+
+        $serverParameters = $this->apiClient->getInternalRequest()->getServer();
+
+        $this->assertArrayHasKey('HTTP_CONTENT_TRANSFER_ENCODING', $serverParameters);
+        $this->assertEquals('BINARY', $serverParameters['HTTP_CONTENT_TRANSFER_ENCODING']);
     }
 }

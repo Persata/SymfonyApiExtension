@@ -33,7 +33,7 @@ class SymfonyApiExtension implements ExtensionInterface
      *
      * @param ContainerBuilder $container
      */
-    public function process(ContainerBuilder $container): void
+    public function process(ContainerBuilder $container)
     {
     }
 
