@@ -19,10 +19,16 @@ Requires the FriendsOfBehat [SymfonyExtension](https://github.com/FriendsOfBehat
     ```yaml
     # behat.yml
     default:
-        # ...
+        suites:
+            default:
+                contexts:
+                    - Persata\SymfonyApiExtension\Context\ApiContext: ~
+
         extensions:
-            FriendsOfBehat\SymfonyExtension: ~
             Persata\SymfonyApiExtension: ~
+            FriendsOfBehat\SymfonyExtension:
+                kernel:
+                    bootstrap: vendor/autoload.php
     ```
 
 ## Additional Custom Contexts
