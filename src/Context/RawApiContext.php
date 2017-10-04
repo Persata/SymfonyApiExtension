@@ -18,10 +18,12 @@ class RawApiContext implements ApiClientAwareContext
 
     /**
      * @param ApiClient $apiClient
+     * @return ApiClientAwareContext
      */
-    public function setApiClient(ApiClient $apiClient)
+    public function setApiClient(ApiClient $apiClient): ApiClientAwareContext
     {
         $this->apiClient = $apiClient;
+        return $this;
     }
 
     /**

@@ -147,6 +147,41 @@ class ApiContext extends RawApiContext
     }
 
     /**
+     * @Then /^the JSON response should have the structure$/
+     */
+    public function theJSONResponseShouldHaveTheStructure(PyStringNode $rawJsonStringNode)
+    {
+        $expectedJsonStructure = json_decode($rawJsonStringNode->getRaw(), true);
+        $responseJson = json_decode($this->getApiClient()->getResponse()->getContent(), true);
+
+        $this->assertJsonStructure(
+            $expectedJsonStructure,
+            $responseJson
+        );
+    }
+
+    /**
+     * @param mixed $expectedJsonStructure
+     * @param mixed $responseJson
+     */
+    protected function assertJsonStructure($expectedJsonStructure, $responseJson)
+    {
+        foreach ($expectedJsonStructure as $key => $value) {
+            if (is_array($value) && $key === '*') {
+                Assert::isArray($responseJson);
+                foreach ($responseJson as $responseJsonItem) {
+                    $this->assertJsonStructure($expectedJsonStructure['*'], $responseJsonItem);
+                }
+            } elseif (is_array($value)) {
+                Assert::keyExists($responseJson, $key);
+                $this->assertJsonStructure($expectedJsonStructure[$key], $responseJson[$key]);
+            } else {
+                Assert::keyExists($responseJson, $value);
+            }
+        }
+    }
+
+    /**
      * @Then /^the XML response root should have attribute "([^"]*)" equal to "([^"]*)"$/
      */
     public function theXmlResponseShouldHaveAttributeEqualTo(string $name, string $value)

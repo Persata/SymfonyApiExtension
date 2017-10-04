@@ -6,7 +6,7 @@ use Persata\SymfonyApiExtension\ApiClient;
 use Symfony\Component\HttpKernel\Kernel;
 
 /**
- * Class HeadersTests
+ * Class HeadersTest
  *
  * @package Persata\SymfonyApiExtension\Tests
  */
