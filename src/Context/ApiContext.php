@@ -151,7 +151,16 @@ class ApiContext extends RawApiContext
      */
     public function theJSONResponseShouldHaveTheStructure(PyStringNode $rawJsonStringNode)
     {
-        $expectedJsonStructure = json_decode($rawJsonStringNode->getRaw(), true);
+        if (strpos($rawJsonStringNode->getRaw(), '{') === 0) {
+            trigger_error(
+                'Passing raw JSON to the structure test is deprecated and will be removed in v0.2. Please pass a PHP array instead.',
+                E_USER_DEPRECATED
+            );
+            $expectedJsonStructure = json_decode($rawJsonStringNode->getRaw(), true);
+        } else {
+            $expectedJsonStructure = eval(sprintf('return %s;', $rawJsonStringNode->getRaw()));
+        }
+
         $responseJson = json_decode($this->getApiClient()->getResponse()->getContent(), true);
 
         $this->assertJsonStructure(

@@ -55,10 +55,10 @@ class JsonStructureTest extends TestCase
     public function testSimpleJsonStructure()
     {
         $simpleStructureNode = new PyStringNode([
-            json_encode([
+            "[
                 'firstName',
                 'lastName',
-            ]),
+            ]",
         ], 0);
 
         $this->mockResponse
@@ -77,10 +77,10 @@ class JsonStructureTest extends TestCase
     public function testSimpleJsonStructureFail()
     {
         $simpleStructureNode = new PyStringNode([
-            json_encode([
+            "[
                 'firstName',
                 'lastName',
-            ]),
+            ]",
         ], 0);
 
         $this->mockResponse
@@ -105,13 +105,13 @@ class JsonStructureTest extends TestCase
     public function testNestedJsonStructure()
     {
         $nestedStructureNode = new PyStringNode([
-            json_encode([
+            "[
                 'firstName',
                 'occupation' => [
                     'jobTitle',
                     'companyName',
                 ],
-            ]),
+            ]",
         ], 0);
 
 
@@ -156,10 +156,13 @@ class JsonStructureTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         try {
+            \PHPUnit_Framework_Error_Deprecated::$enabled = false;
             $this->apiContext->theJSONResponseShouldHaveTheStructure($nestedStructureNode);
         } catch (InvalidArgumentException $invalidArgumentException) {
             $this->assertEquals('Expected the key "companyName" to exist.', $invalidArgumentException->getMessage());
             throw $invalidArgumentException;
+        } finally {
+            \PHPUnit_Framework_Error_Deprecated::$enabled = true;
         }
     }
 
@@ -169,13 +172,13 @@ class JsonStructureTest extends TestCase
     public function testAsteriskStructure()
     {
         $asteriskStructureNode = new PyStringNode([
-            json_encode([
+            "[
                 '*' => [
                     'id',
                     'firstName',
                     'lastName',
                 ],
-            ]),
+            ]",
         ], 0);
 
 
@@ -196,6 +199,41 @@ class JsonStructureTest extends TestCase
      * @return void
      */
     public function testAsteriskStructureFail()
+    {
+        $asteriskStructureNode = new PyStringNode([
+            "[
+                '*' => [
+                    'id',
+                    'firstName',
+                    'lastName',
+                ],
+            ]",
+        ], 0);
+
+
+        $this->mockResponse
+            ->method('getContent')
+            ->willReturn(json_encode([
+                [
+                    'id'        => 11,
+                    'firstName' => 'Ross',
+                ],
+            ]));
+
+        $this->expectException(InvalidArgumentException::class);
+
+        try {
+            $this->apiContext->theJSONResponseShouldHaveTheStructure($asteriskStructureNode);
+        } catch (InvalidArgumentException $invalidArgumentException) {
+            $this->assertEquals('Expected the key "lastName" to exist.', $invalidArgumentException->getMessage());
+            throw $invalidArgumentException;
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function testAsteriskStructureFailBackwardsCompatibility()
     {
         $asteriskStructureNode = new PyStringNode([
             json_encode([
@@ -220,10 +258,13 @@ class JsonStructureTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         try {
+            \PHPUnit_Framework_Error_Deprecated::$enabled = false;
             $this->apiContext->theJSONResponseShouldHaveTheStructure($asteriskStructureNode);
         } catch (InvalidArgumentException $invalidArgumentException) {
             $this->assertEquals('Expected the key "lastName" to exist.', $invalidArgumentException->getMessage());
             throw $invalidArgumentException;
+        } finally {
+            \PHPUnit_Framework_Error_Deprecated::$enabled = true;
         }
     }
 }
