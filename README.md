@@ -63,6 +63,15 @@ services:
             - { name: fob.context_service }
 ```
 
+## FOSRest Form Validation
+
+If you are using the FOSRestBundle within your Symfony application and are making use of the [form response features](https://symfony.com/doc/master/bundles/FOSRestBundle/2-the-view-layer.html#forms-and-views), there is an additional `FOSRestFormValidationContext` class provided for testing for the presence or omission of errors:
+
+```gherkin
+Then the JSON response should have the error "This value should not be null." at "user.firstName"
+And the JSON response should not have any errors on "user.lastName"
+```
+
 ## Example Scenario
 ```gherkin
 Scenario: Testing Basic JSON Endpoint
@@ -76,5 +85,11 @@ Scenario: Testing Basic JSON Endpoint
     {
         "hello": "world"
     }
+    """
+    And the JSON response should have the structure
+    """
+    [
+        "hello"
+    ]
     """
 ```
