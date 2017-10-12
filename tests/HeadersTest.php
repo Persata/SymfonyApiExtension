@@ -3,6 +3,7 @@
 namespace Persata\SymfonyApiExtension\Tests;
 
 use Persata\SymfonyApiExtension\ApiClient;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\Kernel;
 
 /**
@@ -10,7 +11,7 @@ use Symfony\Component\HttpKernel\Kernel;
  *
  * @package Persata\SymfonyApiExtension\Tests
  */
-class HeadersTest extends \PHPUnit_Framework_TestCase
+class HeadersTest extends TestCase
 {
     /**
      * @var ApiClient
