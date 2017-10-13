@@ -53,6 +53,14 @@ class ApiContext extends RawApiContext
     }
 
     /**
+     * @Given /^the request query parameters are$/
+     */
+    public function theRequestQueryParametersAre(PyStringNode $requestQueryParameters)
+    {
+        $this->getApiClient()->setRequestParameters(json_decode($requestQueryParameters->getRaw(), true));
+    }
+
+    /**
      * @When /^the request is sent using (GET|POST|PUT|PATCH|DELETE|OPTIONS) to "([^"]*)"$/
      */
     public function theRequestIsSentTo(string $method, string $uri)

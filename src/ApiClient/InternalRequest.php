@@ -31,6 +31,16 @@ class InternalRequest extends Request
     }
 
     /**
+     * @param array $parameters
+     * @return InternalRequest
+     */
+    public function setParameters(array $parameters): InternalRequest
+    {
+        $this->parameters = $parameters;
+        return $this;
+    }
+
+    /**
      * @param string $key
      * @param mixed  $value
      * @return InternalRequest

@@ -123,6 +123,16 @@ class ApiClient
     }
 
     /**
+     * @param array $requestParameters
+     * @return ApiClient
+     */
+    public function setRequestParameters(array $requestParameters = []): ApiClient
+    {
+        $this->internalRequest->setParameters($requestParameters);
+        return $this;
+    }
+
+    /**
      * @param string $method
      * @param string $uri
      * @return ApiClient
