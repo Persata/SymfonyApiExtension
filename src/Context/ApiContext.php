@@ -178,20 +178,22 @@ class ApiContext extends RawApiContext
     }
 
     /**
-     * @param mixed $expectedJsonStructure
-     * @param mixed $responseJson
+     * @param array $expectedJsonStructure
+     * @param array $responseJson
      */
     protected function assertJsonStructure($expectedJsonStructure, $responseJson)
     {
         foreach ($expectedJsonStructure as $key => $value) {
-            if (is_array($value) && $key === '*') {
-                Assert::isArray($responseJson);
-                foreach ($responseJson as $responseJsonItem) {
-                    $this->assertJsonStructure($expectedJsonStructure['*'], $responseJsonItem);
+            if (is_array($value)) {
+                if ($key === '*') {
+                    Assert::isArray($responseJson);
+                    foreach ($responseJson as $responseJsonItem) {
+                        $this->assertJsonStructure($expectedJsonStructure['*'], $responseJsonItem);
+                    }
+                } else {
+                    Assert::keyExists($responseJson, $key);
+                    $this->assertJsonStructure($expectedJsonStructure[$key], $responseJson[$key]);
                 }
-            } elseif (is_array($value)) {
-                Assert::keyExists($responseJson, $key);
-                $this->assertJsonStructure($expectedJsonStructure[$key], $responseJson[$key]);
             } else {
                 Assert::keyExists($responseJson, $value);
             }
