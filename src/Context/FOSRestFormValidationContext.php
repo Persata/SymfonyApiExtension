@@ -13,6 +13,7 @@ class FOSRestFormValidationContext extends RawApiContext
 {
     /**
      * @Then /^the JSON response should have the error "([^"]*)" at "([^"]*)"$/
+     * @Then /^the JSON response should have the error '([^']*)' at "([^"]*)"$/
      */
     public function theJSONResponseShouldHaveTheErrorAt(string $errorMessage, string $formChildFieldDescriptor)
     {
