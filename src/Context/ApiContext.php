@@ -77,6 +77,14 @@ class ApiContext extends RawApiContext
     }
 
     /**
+     * @Then /^the "([^"]*)" response header is "([^"]*)"$/
+     */
+    public function theResponseHeaderIs(string $key, string $value)
+    {
+        Assert::same($this->getApiClient()->getResponse()->headers->get($key), $value);
+    }
+
+    /**
      * @Then /^the response content type should be HTML$/
      */
     public function theResponseContentTypeShouldBeHTML()
