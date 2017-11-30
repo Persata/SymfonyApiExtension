@@ -180,6 +180,46 @@ class ApiContext extends RawApiContext
     }
 
     /**
+     * Checks that response body contains JSON from PyString.
+     *
+     * Do not check that the response body /only/ contains the JSON from PyString,
+     *
+     * @param PyStringNode $jsonString
+     *
+     * @throws \RuntimeException
+     *
+     * @Then /^(?:the )?response should contain json$/
+     */
+    public function theResponseShouldContainJson(PyStringNode $jsonString)
+    {
+        $etalon = json_decode($jsonString->getRaw(), true);
+        $actual = json_decode($this->getApiClient()->getResponse()->getContent(), true);
+        if (null === $etalon) {
+            throw new \RuntimeException(
+                "Can not convert etalon to json:\n" . $jsonString->getRaw()
+            );
+        }
+        if (null === $actual) {
+            throw new \RuntimeException(
+                "Can not convert actual to json:\n" . (string) $this->getApiClient()->getResponse()->getContent()
+            );
+        }
+        Assert::greaterThanEq(count($actual), count($etalon));
+        $this->checkDataForJson($etalon, $actual);
+    }
+    private function checkDataForJson($etalon, $actual)
+    {
+        foreach ($etalon as $key => $needle) {
+            Assert::keyExists($actual, $key);
+            if (is_array($etalon[$key])) {
+                $this->checkDataForJson($etalon[$key], $actual[$key]);
+            } else {
+                Assert::same($etalon[$key], $actual[$key]);
+            }
+        }
+    }
+
+    /**
      * @Then /^the JSON response should have the structure$/
      */
     public function theJSONResponseShouldHaveTheStructure(PyStringNode $rawJsonStringNode)
