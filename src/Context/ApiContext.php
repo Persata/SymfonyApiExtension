@@ -163,6 +163,23 @@ class ApiContext extends RawApiContext
     }
 
     /**
+     * @Then /^the JSON response should have (\d+) elements in the "([^"]*)" array$/
+     * @param int $elementCount Number of elements
+     * @param string $arrayName Name of array
+     */
+    public function theJSONResponseShouldHaveNumberElementsInArray($elementCount, $arrayName)
+    {
+        $responseJson = json_decode($this->getApiClient()->getResponse()->getContent(), true);
+        $foundArray = $responseJson;
+        $arrayName = explode('.', $arrayName);
+        foreach ($arrayName as $name) {
+            Assert::keyExists($foundArray, $name);
+            $foundArray = $foundArray[$name];
+        }
+        Assert::eq(count($foundArray), $elementCount);
+    }
+
+    /**
      * @Then /^the JSON response should have the structure$/
      */
     public function theJSONResponseShouldHaveTheStructure(PyStringNode $rawJsonStringNode)
