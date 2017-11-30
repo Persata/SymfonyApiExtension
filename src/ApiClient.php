@@ -53,6 +53,8 @@ class ApiClient
      * @var bool
      */
     private $hasPerformedRequest;
+    
+    private $profiler = false;
 
     /**
      * ApiClient constructor.
@@ -156,6 +158,13 @@ class ApiClient
             $this->hasPerformedRequest = true;
         }
 
+        if ($this->profiler) {
+            $this->profiler = false;
+
+            $this->kernel->boot();
+            $this->kernel->getContainer()->get('profiler')->enable();
+        }
+
         $this->response = $this->kernel->handle($this->request);
 
         if ($this->kernel instanceof TerminableInterface) {
@@ -171,5 +180,31 @@ class ApiClient
     public function getResponse(): Response
     {
         return $this->response;
+    }
+
+    /**
+     * Gets the profile associated with the current Response.
+     *
+     * @return HttpProfile A Profile instance
+     */
+    public function getProfile()
+    {
+        if (!$this->kernel->getContainer()->has('profiler')) {
+            return false;
+        }
+
+        return $this->kernel->getContainer()->get('profiler')->loadProfileFromResponse($this->response);
+    }
+
+    /**
+     * Enables the profiler for the very next request.
+     *
+     * If the profiler is not enabled, the call to this method does nothing.
+     */
+    public function enableProfiler()
+    {
+        if ($this->kernel->getContainer()->has('profiler')) {
+            $this->profiler = true;
+        }
     }
 }
