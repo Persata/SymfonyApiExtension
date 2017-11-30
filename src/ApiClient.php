@@ -6,6 +6,7 @@ use Persata\SymfonyApiExtension\ApiClient\InternalRequest;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\HttpKernel\TerminableInterface;
 
 /**
  * Class ApiClient
@@ -156,6 +157,10 @@ class ApiClient
         }
 
         $this->response = $this->kernel->handle($this->request);
+
+        if ($this->kernel instanceof TerminableInterface) {
+            $this->kernel->terminate($this->request, $this->response);
+        }
 
         return $this;
     }
