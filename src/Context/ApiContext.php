@@ -61,6 +61,21 @@ class ApiContext extends RawApiContext
     }
 
     /**
+     * @Given /^the file "([^"]*)" is attached to the request with key "([^"]*)"$/
+     */
+    public function theFileIsAttachedToTheRequestWithKey(string $path, string $requestKey)
+    {
+        if ($this->getApiExtensionParameter('files_path')) {
+            $fullPath = rtrim(realpath($this->getApiExtensionParameter('files_path')), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $path;
+            if (is_file($fullPath)) {
+                $path = $fullPath;
+            }
+        }
+
+        $this->getApiClient()->addFile($path, $requestKey);
+    }
+
+    /**
      * @When /^the request is sent using (GET|POST|PUT|PATCH|DELETE|OPTIONS) to "([^"]*)"$/
      */
     public function theRequestIsSentTo(string $method, string $uri)
@@ -164,8 +179,8 @@ class ApiContext extends RawApiContext
 
     /**
      * @Then /^the JSON response should have (\d+) elements in the "([^"]*)" array$/
-     * @param int $elementCount Number of elements
-     * @param string $arrayName Name of array
+     * @param int    $elementCount Number of elements
+     * @param string $arrayName    Name of array
      */
     public function theJSONResponseShouldHaveNumberElementsInArray($elementCount, $arrayName)
     {
@@ -177,6 +192,51 @@ class ApiContext extends RawApiContext
             $foundArray = $foundArray[$name];
         }
         Assert::eq(count($foundArray), $elementCount);
+    }
+
+    /**
+     * Checks that response body contains JSON from PyString.
+     *
+     * Do not check that the response body /only/ contains the JSON from PyString,
+     *
+     * @param PyStringNode $jsonString
+     *
+     * @throws \RuntimeException
+     *
+     * @Then /^(?:the )?response should contain json$/
+     */
+    public function theResponseShouldContainJson(PyStringNode $jsonString)
+    {
+        $etalon = json_decode($jsonString->getRaw(), true);
+        $actual = json_decode($this->getApiClient()->getResponse()->getContent(), true);
+        if (null === $etalon) {
+            throw new \RuntimeException(
+                "Can not convert etalon to json:\n" . $jsonString->getRaw()
+            );
+        }
+        if (null === $actual) {
+            throw new \RuntimeException(
+                "Can not convert actual to json:\n" . (string)$this->getApiClient()->getResponse()->getContent()
+            );
+        }
+        Assert::greaterThanEq(count($actual), count($etalon));
+        $this->checkDataForJson($etalon, $actual);
+    }
+
+    /**
+     * @param array $etalon
+     * @param array $actual
+     */
+    private function checkDataForJson($etalon, $actual)
+    {
+        foreach ($etalon as $key => $needle) {
+            Assert::keyExists($actual, $key);
+            if (is_array($etalon[$key])) {
+                $this->checkDataForJson($etalon[$key], $actual[$key]);
+            } else {
+                Assert::same($etalon[$key], $actual[$key]);
+            }
+        }
     }
 
     /**

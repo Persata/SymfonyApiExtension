@@ -76,6 +76,7 @@ class SymfonyApiExtension implements ExtensionInterface
         $builder
             ->children()
                 ->scalarNode('base_url')->defaultNull()->end()
+                ->scalarNode('files_path')->defaultNull()->end()
             ->end();
     }
 
@@ -90,10 +91,13 @@ class SymfonyApiExtension implements ExtensionInterface
         $container->setDefinition(self::API_CLIENT_ID, new Definition(ApiClient::class, [
             new Reference(SymfonyExtension::DRIVER_KERNEL_ID),
             $config['base_url'],
+            '%symfony_api_extension.parameters%'
         ]));
 
         $this->loadContextInitializer($container);
         $this->loadApiClientListener($container);
+
+        $container->setParameter('symfony_api_extension.parameters', $config);
     }
 
     /**
@@ -103,6 +107,7 @@ class SymfonyApiExtension implements ExtensionInterface
     {
         $definition = new Definition(ApiClientAwareInitializer::class, [
             new Reference(self::API_CLIENT_ID),
+            '%symfony_api_extension.parameters%'
         ]);
         $definition->addTag(ContextExtension::INITIALIZER_TAG, ['priority' => 0]);
         $container->setDefinition('symfony_api.context_initializer', $definition);

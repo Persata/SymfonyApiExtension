@@ -46,6 +46,7 @@ services:
         class: Persata\SymfonyApiExtension\Context\ApiContext
         calls:
             - [setApiClient, ['@__behat__.api_client']]
+            - [setApiExtensionParameters, ['%__behat__.symfony_api_extension.parameters%']]
         tags:
             - { name: fob.context_service }
 ```
@@ -59,6 +60,7 @@ services:
         class: TheClass\Of\Your\CustomContext
         calls:
             - [setApiClient, ['@__behat__.api_client']]
+            - [setApiExtensionParameters, ['%__behat__.symfony_api_extension.parameters%']]
         tags:
             - { name: fob.context_service }
 ```
@@ -92,4 +94,14 @@ Scenario: Testing Basic JSON Endpoint
         "hello"
     ]
     """
+```
+
+## Extension Configuration
+```yaml
+# behat.yml
+default:
+    extensions:
+        Persata\SymfonyApiExtension:
+            base_url: 'http://my-api.local' # Base URL used for requests sent to the Symfony kernel. Defaults to null.
+            files_path: "%paths.base%/src/Behat/Resources/fixtures/" # Base directory of files to be used for upload tests. Defaults to null.
 ```

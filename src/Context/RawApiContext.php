@@ -17,6 +17,11 @@ class RawApiContext implements ApiClientAwareContext
     private $apiClient;
 
     /**
+     * @var array
+     */
+    private $apiExtensionParameters;
+
+    /**
      * @param ApiClient $apiClient
      * @return ApiClientAwareContext
      */
@@ -27,10 +32,29 @@ class RawApiContext implements ApiClientAwareContext
     }
 
     /**
+     * @param array $parameters
+     * @return ApiClientAwareContext
+     */
+    public function setApiExtensionParameters(array $parameters): ApiClientAwareContext
+    {
+        $this->apiExtensionParameters = $parameters;
+        return $this;
+    }
+
+    /**
      * @return ApiClient
      */
     public function getApiClient(): ApiClient
     {
         return $this->apiClient;
+    }
+
+    /**
+     * @param $name
+     * @return mixed
+     */
+    public function getApiExtensionParameter($name)
+    {
+        return $this->apiExtensionParameters[$name] ?? null;
     }
 }

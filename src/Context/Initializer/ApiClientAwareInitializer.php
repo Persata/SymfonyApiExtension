@@ -20,11 +20,20 @@ class ApiClientAwareInitializer implements ContextInitializer
     private $apiClient;
 
     /**
-     * @inheritDoc
+     * @var array
      */
-    public function __construct(ApiClient $apiClient)
+    private $apiExtensionParameters;
+
+    /**
+     * ApiClientAwareInitializer constructor.
+     *
+     * @param ApiClient $apiClient
+     * @param array     $parameters
+     */
+    public function __construct(ApiClient $apiClient, array $parameters = [])
     {
         $this->apiClient = $apiClient;
+        $this->apiExtensionParameters = $parameters;
     }
 
     /**
@@ -32,10 +41,11 @@ class ApiClientAwareInitializer implements ContextInitializer
      */
     public function initializeContext(Context $context)
     {
-        if (!$context instanceof ApiClientAwareContext) {
+        if (! $context instanceof ApiClientAwareContext) {
             return;
         }
 
         $context->setApiClient($this->apiClient);
+        $context->setApiExtensionParameters($this->apiExtensionParameters);
     }
 }

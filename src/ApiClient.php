@@ -55,15 +55,26 @@ class ApiClient
     private $hasPerformedRequest;
 
     /**
+     * @var array
+     */
+    private $parameters;
+
+    /**
+     * @var bool
+     */
+    private $profiler = false;
+
+    /**
      * ApiClient constructor.
      *
      * @param Kernel      $kernel
      * @param string|null $baseUrl
      */
-    public function __construct(Kernel $kernel, string $baseUrl = null)
+    public function __construct(Kernel $kernel, string $baseUrl = null, array $parameters = [])
     {
         $this->kernel = $kernel;
         $this->baseUrl = $baseUrl;
+        $this->parameters = $parameters;
         $this->internalRequest = InternalRequest::createDefault($this->baseUrl);
     }
 
@@ -93,7 +104,7 @@ class ApiClient
      */
     public function setRequestHeader($key, $value): ApiClient
     {
-        if (in_array($key, self::NON_HTTP_PREFIXED_HEADERS, false)) {
+        if (\in_array($key, self::NON_HTTP_PREFIXED_HEADERS, false)) {
             $key = str_replace('-', '_', strtoupper($key));
         } else {
             $key = sprintf('HTTP_%s', preg_replace('/\s|-/', '_', strtoupper($key)));
@@ -134,6 +145,17 @@ class ApiClient
     }
 
     /**
+     * @param string $path
+     * @param string $requestKey
+     * @return ApiClient
+     */
+    public function addFile(string $path, string $requestKey)
+    {
+        $this->internalRequest->addFile($path, $requestKey);
+        return $this;
+    }
+
+    /**
      * @param string $method
      * @param string $uri
      * @return ApiClient
@@ -156,6 +178,13 @@ class ApiClient
             $this->hasPerformedRequest = true;
         }
 
+        if ($this->profiler) {
+            $this->profiler = false;
+
+            $this->kernel->boot();
+            $this->kernel->getContainer()->get('profiler')->enable();
+        }
+
         $this->response = $this->kernel->handle($this->request);
 
         if ($this->kernel instanceof TerminableInterface) {
@@ -171,5 +200,31 @@ class ApiClient
     public function getResponse(): Response
     {
         return $this->response;
+    }
+
+    /**
+     * Gets the profile associated with the current Response.
+     *
+     * @return HttpProfile|bool A Profile instance
+     */
+    public function getProfile()
+    {
+        if (! $this->kernel->getContainer()->has('profiler')) {
+            return false;
+        }
+
+        return $this->kernel->getContainer()->get('profiler')->loadProfileFromResponse($this->response);
+    }
+
+    /**
+     * Enables the profiler for the very next request.
+     *
+     * If the profiler is not enabled, the call to this method does nothing.
+     */
+    public function enableProfiler()
+    {
+        if ($this->kernel->getContainer()->has('profiler')) {
+            $this->profiler = true;
+        }
     }
 }
