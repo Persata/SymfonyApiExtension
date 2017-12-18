@@ -53,11 +53,11 @@ class ApiContext extends RawApiContext
     }
 
     /**
-     * @Given /^the request query parameters are$/
+     * @Given /^the request parameters are$/
      */
-    public function theRequestQueryParametersAre(PyStringNode $requestQueryParameters)
+    public function theRequestParametersAre(PyStringNode $requestParameterString)
     {
-        $this->getApiClient()->setRequestParameters(json_decode($requestQueryParameters->getRaw(), true));
+        $this->getApiClient()->setParameters(json_decode($requestParameterString->getRaw(), true));
     }
 
     /**
@@ -246,7 +246,7 @@ class ApiContext extends RawApiContext
     {
         if (strpos($rawJsonStringNode->getRaw(), '{') === 0) {
             trigger_error(
-                'Passing raw JSON to the structure test is deprecated and will be removed in v0.2. Please pass a PHP array instead.',
+                'Passing raw JSON to the structure test is deprecated and will be removed in v1.0. Please pass a PHP array instead.',
                 E_USER_DEPRECATED
             );
             $expectedJsonStructure = json_decode($rawJsonStringNode->getRaw(), true);

@@ -55,11 +55,6 @@ class ApiClient
     private $hasPerformedRequest;
 
     /**
-     * @var array
-     */
-    private $parameters;
-
-    /**
      * @var bool
      */
     private $profiler = false;
@@ -70,11 +65,10 @@ class ApiClient
      * @param Kernel      $kernel
      * @param string|null $baseUrl
      */
-    public function __construct(Kernel $kernel, string $baseUrl = null, array $parameters = [])
+    public function __construct(Kernel $kernel, string $baseUrl = null)
     {
         $this->kernel = $kernel;
         $this->baseUrl = $baseUrl;
-        $this->parameters = $parameters;
         $this->internalRequest = InternalRequest::createDefault($this->baseUrl);
     }
 
@@ -135,12 +129,12 @@ class ApiClient
     }
 
     /**
-     * @param array $requestParameters
+     * @param array $parameters
      * @return ApiClient
      */
-    public function setRequestParameters(array $requestParameters = []): ApiClient
+    public function setParameters(array $parameters = []): ApiClient
     {
-        $this->internalRequest->setParameters($requestParameters);
+        $this->internalRequest->setParameters($parameters);
         return $this;
     }
 

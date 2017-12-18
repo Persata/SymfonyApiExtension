@@ -16,11 +16,11 @@ interface ApiClientAwareContext extends Context
      * @param ApiClient $apiClient
      * @return ApiClientAwareContext
      */
-    public function setApiClient(ApiClient $apiClient);
+    public function setApiClient(ApiClient $apiClient): ApiClientAwareContext;
 
     /**
      * @param array $parameters
      * @return ApiClientAwareContext
      */
-    public function setApiExtensionParameters(array $parameters);
+    public function setApiExtensionParameters(array $parameters): ApiClientAwareContext;
 }

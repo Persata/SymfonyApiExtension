@@ -90,8 +90,7 @@ class SymfonyApiExtension implements ExtensionInterface
     {
         $container->setDefinition(self::API_CLIENT_ID, new Definition(ApiClient::class, [
             new Reference(SymfonyExtension::DRIVER_KERNEL_ID),
-            $config['base_url'],
-            '%symfony_api_extension.parameters%'
+            $config['base_url']
         ]));
 
         $this->loadContextInitializer($container);

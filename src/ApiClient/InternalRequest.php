@@ -57,7 +57,7 @@ class InternalRequest extends Request
      * @param string $requestKey
      * @return InternalRequest
      */
-    public function addFile(string $path, string $requestKey)
+    public function addFile(string $path, string $requestKey): InternalRequest
     {
         if (null !== $path && is_readable($path)) {
             $error = UPLOAD_ERR_OK;
