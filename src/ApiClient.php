@@ -157,7 +157,7 @@ class ApiClient
     public function request(string $method, string $uri): ApiClient
     {
         $this->request = Request::create(
-            $uri,
+            $this->makePathAbsolute($uri),
             $method,
             $this->internalRequest->getParameters(),
             $this->internalRequest->getCookies(),
@@ -220,5 +220,17 @@ class ApiClient
         if ($this->kernel->getContainer()->has('profiler')) {
             $this->profiler = true;
         }
+    }
+
+    /**
+     * @param string $path
+     *
+     * @return string
+     */
+    final protected function makePathAbsolute($path): string
+    {
+        $baseUrl = rtrim($this->baseUrl, '/') . '/';
+
+        return 0 !== strpos($path, 'http') ? $baseUrl . ltrim($path, '/') : $path;
     }
 }

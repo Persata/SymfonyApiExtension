@@ -1,5 +1,9 @@
 ## CHANGELOG
 
+### v0.2.1 2018-01-04
+
+- Fixed the functionality of the `base_url` setting for the extension.
+
 ### v0.2.0 2017-12-18
 
 - Added support for file uploads in a similar fashion to Mink / Symfony's WebTestCase.
