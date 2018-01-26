@@ -3,6 +3,7 @@
 namespace Persata\SymfonyApiExtension\Context;
 
 use Persata\SymfonyApiExtension\ApiClient;
+use Webmozart\Assert\Assert;
 
 /**
  * Class RawApiContext
@@ -56,5 +57,28 @@ class RawApiContext implements ApiClientAwareContext
     public function getApiExtensionParameter($name)
     {
         return $this->apiExtensionParameters[$name] ?? null;
+    }
+
+    /**
+     * @param array $expectedJsonStructure
+     * @param array $responseJson
+     */
+    protected function assertJsonStructure($expectedJsonStructure, $responseJson)
+    {
+        foreach ($expectedJsonStructure as $key => $value) {
+            if (is_array($value)) {
+                if ($key === '*') {
+                    Assert::isArray($responseJson);
+                    foreach ($responseJson as $responseJsonItem) {
+                        $this->assertJsonStructure($expectedJsonStructure['*'], $responseJsonItem);
+                    }
+                } else {
+                    Assert::keyExists($responseJson, $key);
+                    $this->assertJsonStructure($expectedJsonStructure[$key], $responseJson[$key]);
+                }
+            } else {
+                Assert::keyExists($responseJson, $value);
+            }
+        }
     }
 }
