@@ -1,5 +1,18 @@
 ## CHANGELOG
 
+### v0.2.2 2018-01-29
+
+- Added new assertions for checking the values of nested JSON data:
+```
+Then the JSON response should have the nested key "data.user.firstName" equal to "Alice"
+# OR
+Then the JSON response should have the nested key "data:user:firstName" equal to "Alice" with delimiter ":"
+```
+
+### v0.2.2 2018-01-26
+
+- Moved the `assertJsonStructure` method from ApiContext to RawApiContext to allow child classes to use it
+
 ### v0.2.1 2018-01-04
 
 - Fixed the functionality of the `base_url` setting for the extension.

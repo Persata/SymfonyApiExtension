@@ -178,6 +178,24 @@ class ApiContext extends RawApiContext
     }
 
     /**
+     * @Then /^the JSON response should have the nested key "([^"]*)" equal to "([^"]*)"$/
+     * @Then /^the JSON response should have the nested key "([^"]*)" equal to "([^"]*)" with the delimiter "([^"]*)"$/
+     */
+    public function theJSONResponseShouldHaveTheNestedKeyEqualTo(string $key, string $value, string $delimiter = '.')
+    {
+        $jsonUnderSpecification = json_decode($this->getApiClient()->getResponse()->getContent(), true);
+
+        $keysToTraverse = explode($delimiter, $key);
+
+        foreach ($keysToTraverse as $keyToTraverse) {
+            Assert::keyExists($jsonUnderSpecification, $keyToTraverse);
+            $jsonUnderSpecification = $jsonUnderSpecification[$keyToTraverse];
+        }
+
+        Assert::same($jsonUnderSpecification, $value);
+    }
+
+    /**
      * @Then /^the JSON response should have (\d+) elements in the "([^"]*)" array$/
      * @param int    $elementCount Number of elements
      * @param string $arrayName    Name of array
