@@ -157,6 +157,22 @@ class ApiContext extends RawApiContext
     }
 
     /**
+     * @Then /^the JSON response should contain the key "([^"]*)"$/
+     * @Then /^the JSON response should contain the key "([^"]*)" with the delimiter "([^"]*)"$/
+     */
+    public function theJSONResponseShouldContainTheNestedKey(string $key, string $delimiter = '.')
+    {
+        $jsonUnderSpecification = json_decode($this->getApiClient()->getResponse()->getContent(), true);
+
+        $keysToTraverse = explode($delimiter, $key);
+
+        foreach ($keysToTraverse as $keyToTraverse) {
+            Assert::keyExists($jsonUnderSpecification, $keyToTraverse);
+            $jsonUnderSpecification = $jsonUnderSpecification[$keyToTraverse];
+        }
+    }
+
+    /**
      * @Then /^the JSON response should be$/
      */
     public function theJSONResponseShouldBe(PyStringNode $expectedContentStringNode)

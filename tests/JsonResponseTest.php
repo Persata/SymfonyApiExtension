@@ -60,7 +60,7 @@ class JsonResponseTest extends TestCase
         $this->apiContext->theJSONResponseShouldHaveTheKeyEqualTo('lastName', 'Kinsman');
     }
 
-    public function testNestedJsonResponseKeyDefaultSeparator()
+    public function testNestedJsonResponseKeyValueDefaultSeparator()
     {
         $this->mockResponse
             ->method('getContent')
@@ -77,7 +77,7 @@ class JsonResponseTest extends TestCase
         $this->apiContext->theJSONResponseShouldHaveTheNestedKeyEqualTo('data.user.lastName', 'Kinsman');
     }
 
-    public function testNestedJsonResponseKeyCustomSeparator()
+    public function testNestedJsonResponseKeyValueCustomSeparator()
     {
         $this->mockResponse
             ->method('getContent')
@@ -92,5 +92,39 @@ class JsonResponseTest extends TestCase
 
         $this->apiContext->theJSONResponseShouldHaveTheNestedKeyEqualTo('data:user:firstName', 'Ross', ':');
         $this->apiContext->theJSONResponseShouldHaveTheNestedKeyEqualTo('data:user:lastName', 'Kinsman', ':');
+    }
+
+    public function testNestedJsonResponseKeyDefaultSeparator()
+    {
+        $this->mockResponse
+            ->method('getContent')
+            ->willReturn(json_encode([
+                'data' => [
+                    'user' => [
+                        'firstName' => 'Ross',
+                        'lastName'  => 'Kinsman',
+                    ],
+                ],
+            ]));
+
+        $this->apiContext->theJSONResponseShouldContainTheNestedKey('data.user.firstName');
+        $this->apiContext->theJSONResponseShouldContainTheNestedKey('data.user.lastName');
+    }
+
+    public function testNestedJsonResponseKeyCustomSeparator()
+    {
+        $this->mockResponse
+            ->method('getContent')
+            ->willReturn(json_encode([
+                'data' => [
+                    'user' => [
+                        'firstName' => 'Ross',
+                        'lastName'  => 'Kinsman',
+                    ],
+                ],
+            ]));
+
+        $this->apiContext->theJSONResponseShouldContainTheNestedKey('data:user:firstName', ':');
+        $this->apiContext->theJSONResponseShouldContainTheNestedKey('data:user:lastName', ':');
     }
 }
