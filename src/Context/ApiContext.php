@@ -157,8 +157,8 @@ class ApiContext extends RawApiContext
     }
 
     /**
-     * @Then /^the JSON response should contain the key "([^"]*)"$/
-     * @Then /^the JSON response should contain the key "([^"]*)" with the delimiter "([^"]*)"$/
+     * @Then /^the JSON response should contain the nested key "([^"]*)"$/
+     * @Then /^the JSON response should contain the nested key "([^"]*)" with the delimiter "([^"]*)"$/
      */
     public function theJSONResponseShouldContainTheNestedKey(string $key, string $delimiter = '.')
     {

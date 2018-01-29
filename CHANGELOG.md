@@ -1,12 +1,16 @@
 ## CHANGELOG
 
+### v0.2.5 2018-01-29
+
+- Fixed issue with duplicate step definitions
+
 ### v0.2.4 2018-01-29
 
 - Added new assertions for checking the keys of nested JSON data:
 ```
-Then the JSON response should have the nested key "data.user.firstName"
+Then the JSON response should contain the nested key "data.user.firstName"
 # OR
-Then the JSON response should have the nested key "data:user:firstName" with the delimiter ":"
+Then the JSON response should contain the nested key "data:user:firstName" with the delimiter ":"
 ```
 
 ### v0.2.3 2018-01-29
