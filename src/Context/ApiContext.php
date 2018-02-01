@@ -76,6 +76,21 @@ class ApiContext extends RawApiContext
     }
 
     /**
+     * @Given /^the file "([^"]*)" is attached to the request as part of the "([^"]*)" array$/
+     */
+    public function theFileIsAttachedToTheRequestAsPartOfTheArray(string $path, string $requestKey)
+    {
+        if ($this->getApiExtensionParameter('files_path')) {
+            $fullPath = rtrim(realpath($this->getApiExtensionParameter('files_path')), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $path;
+            if (is_file($fullPath)) {
+                $path = $fullPath;
+            }
+        }
+
+        $this->getApiClient()->addFileToArray($path, $requestKey);
+    }
+
+    /**
      * @When /^the request is sent using (GET|POST|PUT|PATCH|DELETE|OPTIONS) to "([^"]*)"$/
      */
     public function theRequestIsSentTo(string $method, string $uri)

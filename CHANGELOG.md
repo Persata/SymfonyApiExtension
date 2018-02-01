@@ -1,5 +1,12 @@
 ## CHANGELOG
 
+### v0.2.6 2018-02-01
+
+- Added a new step definition for attaching collections of files:
+```
+Given the file "picture-1.png" is attached to the request as part of the "pictures" array
+```
+
 ### v0.2.5 2018-01-29
 
 - Fixed issue with duplicate step definitions

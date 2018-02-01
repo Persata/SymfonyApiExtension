@@ -59,6 +59,33 @@ class InternalRequest extends Request
      */
     public function addFile(string $path, string $requestKey): InternalRequest
     {
+        $this->files[$requestKey] = $this->getUploadedFileInstance($path);
+
+        return $this;
+    }
+
+    /**
+     * @param string $path
+     * @param string $requestKey
+     * @return InternalRequest
+     */
+    public function addFileToArray(string $path, string $requestKey): InternalRequest
+    {
+        if (! isset($this->files[$requestKey]) || ! is_array($this->files[$requestKey])) {
+            $this->files[$requestKey] = [];
+        }
+
+        $this->files[$requestKey][] = $this->getUploadedFileInstance($path);
+
+        return $this;
+    }
+
+    /**
+     * @param string $path
+     * @return UploadedFile
+     */
+    protected function getUploadedFileInstance(string $path)
+    {
         if (null !== $path && is_readable($path)) {
             $error = UPLOAD_ERR_OK;
             $size = filesize($path);
@@ -82,8 +109,7 @@ class InternalRequest extends Request
             $path = '';
         }
 
-        $this->files[$requestKey] = new UploadedFile($path, $name, '', $size, $error, true);
-
-        return $this;
+        return new UploadedFile($path, $name, '', $size, $error, true);
     }
+
 }

@@ -143,9 +143,20 @@ class ApiClient
      * @param string $requestKey
      * @return ApiClient
      */
-    public function addFile(string $path, string $requestKey)
+    public function addFile(string $path, string $requestKey): ApiClient
     {
         $this->internalRequest->addFile($path, $requestKey);
+        return $this;
+    }
+
+    /**
+     * @param string $path
+     * @param string $requestKey
+     * @return ApiClient
+     */
+    public function addFileToArray(string $path, string $requestKey): ApiClient
+    {
+        $this->internalRequest->addFileToArray($path, $requestKey);
         return $this;
     }
 
