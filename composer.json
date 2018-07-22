@@ -13,8 +13,8 @@
         "php": "^7.0",
         "behat/behat": "^3.1",
         "webmozart/assert": "^1.0",
-        "symfony/http-kernel": "^3.0",
-        "symfony/browser-kit": "^3.0",
+        "symfony/http-kernel": "^3.0|^4.0",
+        "symfony/browser-kit": "^3.0|^4.0",
         "friends-of-behat/symfony-extension": "^0.2.1|^1.0"
     },
     "require-dev": {
