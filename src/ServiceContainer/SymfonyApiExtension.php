@@ -75,7 +75,7 @@ class SymfonyApiExtension implements ExtensionInterface
     {
         $builder
             ->children()
-                ->scalarNode('base_url')->defaultNull()->end()
+                ->scalarNode('base_url')->defaultValue('http://localhost/')->end()
                 ->scalarNode('files_path')->defaultNull()->end()
             ->end();
     }
