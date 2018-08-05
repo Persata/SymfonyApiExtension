@@ -156,13 +156,10 @@ class JsonStructureTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         try {
-            \PHPUnit_Framework_Error_Deprecated::$enabled = false;
             $this->apiContext->theJSONResponseShouldHaveTheStructure($nestedStructureNode);
         } catch (InvalidArgumentException $invalidArgumentException) {
             $this->assertEquals('Expected the key "companyName" to exist.', $invalidArgumentException->getMessage());
             throw $invalidArgumentException;
-        } finally {
-            \PHPUnit_Framework_Error_Deprecated::$enabled = true;
         }
     }
 
@@ -258,13 +255,10 @@ class JsonStructureTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         try {
-            \PHPUnit_Framework_Error_Deprecated::$enabled = false;
             $this->apiContext->theJSONResponseShouldHaveTheStructure($asteriskStructureNode);
         } catch (InvalidArgumentException $invalidArgumentException) {
             $this->assertEquals('Expected the key "lastName" to exist.', $invalidArgumentException->getMessage());
             throw $invalidArgumentException;
-        } finally {
-            \PHPUnit_Framework_Error_Deprecated::$enabled = true;
         }
     }
 }
