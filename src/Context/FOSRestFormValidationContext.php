@@ -33,9 +33,9 @@ class FOSRestFormValidationContext extends RawApiContext
      * @param string $formChildFieldDescriptor
      * @return array
      */
-    protected function getChildField(string $formChildFieldDescriptor)
+    protected function getChildField(string $formChildFieldDescriptor): array
     {
-        $responseJson = json_decode($this->getApiClient()->getResponse()->getContent(), true);
+        $responseJson = \json_decode($this->getApiClient()->getResponse()->getContent(), true);
         $fields = explode('.', $formChildFieldDescriptor);
         $currentChild = $responseJson['errors'];
 

@@ -240,7 +240,7 @@ class ApiContext extends RawApiContext
             Assert::keyExists($foundArray, $name);
             $foundArray = $foundArray[$name];
         }
-        Assert::eq(count($foundArray), $elementCount);
+        Assert::eq(\count($foundArray), $elementCount);
     }
 
     /**
@@ -265,10 +265,10 @@ class ApiContext extends RawApiContext
         }
         if (null === $actual) {
             throw new \RuntimeException(
-                "Can not convert actual to json:\n" . (string)$this->getApiClient()->getResponse()->getContent()
+                "Can not convert actual to json:\n" . $this->getApiClient()->getResponse()->getContent()
             );
         }
-        Assert::greaterThanEq(count($actual), count($etalon));
+        Assert::greaterThanEq(\count($actual), \count($etalon));
         $this->checkDataForJson($etalon, $actual);
     }
 
@@ -280,7 +280,7 @@ class ApiContext extends RawApiContext
     {
         foreach ($etalon as $key => $needle) {
             Assert::keyExists($actual, $key);
-            if (is_array($etalon[$key])) {
+            if (\is_array($etalon[$key])) {
                 $this->checkDataForJson($etalon[$key], $actual[$key]);
             } else {
                 Assert::same($etalon[$key], $actual[$key]);

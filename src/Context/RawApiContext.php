@@ -66,7 +66,7 @@ class RawApiContext implements ApiClientAwareContext
     protected function assertJsonStructure($expectedJsonStructure, $responseJson)
     {
         foreach ($expectedJsonStructure as $key => $value) {
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 if ($key === '*') {
                     Assert::isArray($responseJson);
                     foreach ($responseJson as $responseJsonItem) {
