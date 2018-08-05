@@ -22,7 +22,7 @@ class HeadersTest extends TestCase
     {
         /** @var Kernel | \PHPUnit_Framework_MockObject_MockObject $kernelMock */
         $kernelMock = $this->createMock(Kernel::class);
-        $this->apiClient = new ApiClient($kernelMock);
+        $this->apiClient = new ApiClient($kernelMock, 'http://localhost/');
     }
 
     public function testContentType()
