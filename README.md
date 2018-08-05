@@ -42,11 +42,7 @@ If using the FriendsOfBehat [ContextServiceExtension](https://github.com/Friends
 ```yaml
 services:
     # ...
-    persata.symfony_api_extension.context.api_context:
-        class: Persata\SymfonyApiExtension\Context\ApiContext
-        calls:
-            - [setApiClient, ['@__behat__.api_client']]
-            - [setApiExtensionParameters, ['%__behat__.symfony_api_extension.parameters%']]
+    Persata\SymfonyApiExtension\Context\ApiContext:
         tags:
             - { name: fob.context_service }
 ```
@@ -56,11 +52,7 @@ If you need additional context services with access to the same shared ApiClient
 ```yaml
 services:
     # ...
-    the_id.of.your.custom_context:
-        class: TheClass\Of\Your\CustomContext
-        calls:
-            - [setApiClient, ['@__behat__.api_client']]
-            - [setApiExtensionParameters, ['%__behat__.symfony_api_extension.parameters%']]
+    TheClass\Of\Your\CustomContext:
         tags:
             - { name: fob.context_service }
 ```
