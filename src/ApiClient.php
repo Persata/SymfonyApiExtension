@@ -63,13 +63,13 @@ class ApiClient
      * ApiClient constructor.
      *
      * @param Kernel      $kernel
-     * @param string|null $baseUrl
+     * @param string $baseUrl
      */
-    public function __construct(Kernel $kernel, string $baseUrl = null)
+    public function __construct(Kernel $kernel, string $baseUrl)
     {
         $this->kernel = $kernel;
         $this->baseUrl = $baseUrl;
-        $this->internalRequest = InternalRequest::createDefault($this->baseUrl);
+        $this->internalRequest = new InternalRequest($this->baseUrl, 'GET');
     }
 
     /**
@@ -77,7 +77,7 @@ class ApiClient
      */
     public function reset(): ApiClient
     {
-        $this->internalRequest = InternalRequest::createDefault($this->baseUrl);
+        $this->internalRequest = new InternalRequest($this->baseUrl, 'GET');
         $this->request = null;
         $this->response = null;
         return $this;

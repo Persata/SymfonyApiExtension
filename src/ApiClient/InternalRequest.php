@@ -13,15 +13,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class InternalRequest extends Request
 {
     /**
-     * @param string|null $baseUrl
-     * @return InternalRequest
-     */
-    public static function createDefault(string $baseUrl = null): InternalRequest
-    {
-        return new static($baseUrl, null);
-    }
-
-    /**
      * @param mixed $content
      * @return InternalRequest
      */
@@ -71,7 +62,7 @@ class InternalRequest extends Request
      */
     public function addFileToArray(string $path, string $requestKey): InternalRequest
     {
-        if (! isset($this->files[$requestKey]) || ! is_array($this->files[$requestKey])) {
+        if (! isset($this->files[$requestKey]) || ! \is_array($this->files[$requestKey])) {
             $this->files[$requestKey] = [];
         }
 
@@ -84,7 +75,7 @@ class InternalRequest extends Request
      * @param string $path
      * @return UploadedFile
      */
-    protected function getUploadedFileInstance(string $path)
+    protected function getUploadedFileInstance(string $path): UploadedFile
     {
         if (null !== $path && is_readable($path)) {
             $error = UPLOAD_ERR_OK;
