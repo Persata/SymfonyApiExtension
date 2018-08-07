@@ -33,8 +33,8 @@ class ApiClientListener implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            ScenarioTested::BEFORE => ['resetApiClient', 10],
-            ExampleTested::BEFORE  => ['resetApiClient', 10],
+            ScenarioTested::AFTER => ['resetApiClient', 10],
+            ExampleTested::AFTER  => ['resetApiClient', 10],
         ];
     }
 

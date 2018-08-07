@@ -79,7 +79,14 @@ class ApiClient
     {
         $this->internalRequest = new InternalRequest($this->baseUrl, 'GET');
         $this->request = null;
-        $this->response = null;
+	$this->response = null;
+
+        $this->profiler = false;
+
+        $this->hasPerformedRequest = false;
+        $this->kernel->shutdown();
+        $this->kernel->boot();
+
         return $this;
     }
 
