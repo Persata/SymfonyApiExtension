@@ -26,13 +26,13 @@ Requires the FriendsOfBehat [SymfonyExtension](https://github.com/FriendsOfBehat
 
         extensions:
             Persata\SymfonyApiExtension: ~
-			FriendsOfBehat\SymfonyExtension:
-				bootstrap: config/bootstrap.php
-				kernel:
-					class: App\Kernel
-					path: src/Kernel.php
-					environment: test
-					debug: true
+            FriendsOfBehat\SymfonyExtension:
+                bootstrap: config/bootstrap.php
+                kernel:
+                    class: App\Kernel
+                    path: src/Kernel.php
+                    environment: test
+                    debug: true
     ```
 
 ## Additional Custom Contexts
