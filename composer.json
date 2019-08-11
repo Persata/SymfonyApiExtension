@@ -21,10 +21,6 @@
     "require-dev": {
         "phpunit/phpunit": "^6"
     },
-    "suggest": {
-        "friends-of-behat/cross-container-extension": "^1.0",
-        "friends-of-behat/context-service-extension": "^1.0"
-    },
     "autoload": {
         "psr-4": {
             "Persata\\SymfonyApiExtension\\": "src/"

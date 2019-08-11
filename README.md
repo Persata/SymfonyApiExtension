@@ -26,36 +26,19 @@ Requires the FriendsOfBehat [SymfonyExtension](https://github.com/FriendsOfBehat
 
         extensions:
             Persata\SymfonyApiExtension: ~
-            FriendsOfBehat\SymfonyExtension:
-                kernel:
-                    bootstrap: vendor/autoload.php
+			FriendsOfBehat\SymfonyExtension:
+				bootstrap: config/bootstrap.php
+				kernel:
+					class: App\Kernel
+					path: src/Kernel.php
+					environment: test
+					debug: true
     ```
 
 ## Additional Custom Contexts
 
 This package provides a `ContextInitializer` that will set the shared `ApiClient` on any Behat Contexts that implement the `ApiClientAwareContext`. It is best to extend the `RawApiContext` as this already includes the getter & setter for the `ApiClient` instance.
 
-## ContextServiceExtension Integration
-
-If using the FriendsOfBehat [ContextServiceExtension](https://github.com/FriendsOfBehat/ContextServiceExtension), declare the `ApiContext` service like so:
-
-```yaml
-services:
-    # ...
-    Persata\SymfonyApiExtension\Context\ApiContext:
-        tags:
-            - { name: fob.context_service }
-```
-
-If you need additional context services with access to the same shared ApiClient instance, have them extend `RawApiContext` and then declare the service like so:
-
-```yaml
-services:
-    # ...
-    TheClass\Of\Your\CustomContext:
-        tags:
-            - { name: fob.context_service }
-```
 
 ## FOSRest Form Validation
 
