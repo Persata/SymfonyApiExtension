@@ -89,7 +89,7 @@ class SymfonyApiExtension implements ExtensionInterface
     public function load(ContainerBuilder $container, array $config)
     {
         $container->setDefinition(self::API_CLIENT_ID, new Definition(ApiClient::class, [
-            new Reference(SymfonyExtension::DRIVER_KERNEL_ID),
+            new Reference(SymfonyExtension::KERNEL_ID),
             $config['base_url']
         ]));
 
